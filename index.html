@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ALSALAMA | Lucky Draw Form</title>
+  <link rel="icon" href="alsalama.png" type="image/png">
   <!-- Google Fonts: Inter and Outfit -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -2035,9 +2036,26 @@
       try {
         await leadRef.set(submission);
 
-        let submissions = JSON.parse(localStorage.getItem('alsalama-leads') || '[]');
-        submissions.unshift(submission);
-        localStorage.setItem('alsalama-leads', JSON.stringify(submissions));
+        try {
+          const cachedSubmission = {
+            id: submission.id,
+            name: submission.name,
+            phone: submission.phone,
+            fileName: submission.fileName,
+            date: submission.date,
+            createdAt: submission.createdAt,
+            status: submission.status
+          };
+          const submissions = JSON.parse(localStorage.getItem('alsalama-leads') || '[]');
+          const safeSubmissions = Array.isArray(submissions) ? submissions : [];
+          safeSubmissions.unshift(cachedSubmission);
+          localStorage.setItem('alsalama-leads', JSON.stringify(safeSubmissions.slice(0, 20)));
+        } catch (cacheErr) {
+          console.warn('Local submission cache skipped:', cacheErr);
+          try {
+            localStorage.removeItem('alsalama-leads');
+          } catch (_) {}
+        }
 
         submitBtn.classList.remove('loading');
         submitBtn.classList.add('success');
