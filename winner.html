@@ -1341,7 +1341,7 @@
           <div class="draw-name" id="public-draw-name">Ready for the Lucky Draw</div>
           <div class="draw-meta" id="public-draw-meta">
             <div class="draw-meta-divider"><span></span><i data-lucide="users-round"></i><span></span></div>
-            <div>Your entry is all set.</div>
+            <div>Loading participant count...</div>
             <div>Stay tuned for the live shuffle!</div>
           </div>
         </div>
@@ -1493,7 +1493,7 @@
         const remainingMs = Math.max(0, Number(state.endsAt) - getSyncedNow());
         const liveLead = getLiveShuffleLead(state);
         publicDrawSummary.textContent = 'Live draw in progress.';
-        publicDrawCountdown.textContent = String(Math.ceil(remainingMs / 1000));
+        if (publicDrawCountdown) publicDrawCountdown.textContent = String(Math.ceil(remainingMs / 1000));
         publicDrawStatus.textContent = 'Shuffling Live';
         publicDrawName.textContent = liveLead ? liveLead.name : 'Shuffling...';
         publicDrawMeta.textContent = `Selecting from ${participantCount} submitted user${participantCount === 1 ? '' : 's'}.`;
@@ -1503,19 +1503,17 @@
       if (mode === 'complete') {
         const winner = state.winner || {};
         publicDrawSummary.textContent = 'Winner selected.';
-        publicDrawCountdown.textContent = 'Winner';
+        if (publicDrawCountdown) publicDrawCountdown.textContent = 'Winner';
         publicDrawStatus.textContent = 'Selected Winner';
         publicDrawName.textContent = winner.name || 'Winner Selected';
         publicDrawMeta.textContent = winner.phone ? `Phone: ${winner.phone}` : 'The draw has stopped on this user.';
         return;
       }
 
-      const readyCount = participantCount || publicLeads.length;
-      const participantLine = readyCount
-        ? `${readyCount} participant${readyCount === 1 ? '' : 's'} are all set.`
-        : 'Your entry is all set.';
+      const readyCount = publicLeads.length;
+      const participantLine = `${readyCount} participant${readyCount === 1 ? '' : 's'} are all set.`;
       publicDrawSummary.innerHTML = '<span class="summary-line">Thank you for participating in the lucky draw! &#127881;</span><span class="summary-line">Your entry has been successfully submitted.</span><span class="summary-line summary-gap">Please stay tuned and wait for the live shuffle.</span><span class="summary-line">The final winner will be announced shortly.</span>';
-      publicDrawCountdown.innerHTML = '<span class="draw-pill-icon"><i data-lucide="gift"></i></span><span>Ready</span>';
+      if (publicDrawCountdown) publicDrawCountdown.innerHTML = '<span class="draw-pill-icon"><i data-lucide="gift"></i></span><span>Ready</span>';
       publicDrawStatus.textContent = 'STANDBY';
       publicDrawName.textContent = 'Ready for the Lucky Draw';
       publicDrawMeta.innerHTML = `<div class="draw-meta-divider"><span></span><i data-lucide="users-round"></i><span></span></div><div>${participantLine}</div><div>Stay tuned for the live shuffle!</div>`;

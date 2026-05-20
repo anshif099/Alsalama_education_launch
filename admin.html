@@ -854,7 +854,7 @@
     /* WINNER DRAW */
     .draw-grid {
       display: grid;
-      grid-template-columns: minmax(0, 1.35fr) minmax(280px, 0.65fr);
+      grid-template-columns: 1fr;
       gap: 24px;
       align-items: start;
     }
@@ -976,6 +976,23 @@
       box-shadow: var(--shadow);
     }
 
+    .draw-pill-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--primary);
+      color: #ffffff;
+      flex: 0 0 auto;
+    }
+
+    .draw-pill-icon svg {
+      width: 52%;
+      height: 52%;
+    }
+
     .draw-eyebrow {
       font-size: 11px;
       font-weight: 800;
@@ -1003,6 +1020,82 @@
       font-size: 13px;
       line-height: 1.45;
       max-width: 250px;
+    }
+
+    .draw-stage.is-idle .draw-countdown-pill {
+      top: calc(50% - 160px + 10px);
+      min-width: 190px;
+      height: 58px;
+      gap: 12px;
+      padding: 0 18px;
+      background: rgba(255, 255, 255, 0.9);
+      border-color: rgba(177, 18, 41, 0.18);
+      font-size: 28px;
+      box-shadow: 0 20px 45px rgba(76, 13, 26, 0.08);
+    }
+
+    .draw-stage.is-idle .draw-circle {
+      background: rgba(255, 255, 255, 0.94);
+      box-shadow: 0 36px 90px rgba(76, 13, 26, 0.09);
+      justify-content: flex-start;
+      padding: 92px 28px 26px;
+    }
+
+    .draw-stage.is-idle .draw-eyebrow {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      width: 100%;
+      color: #6f5360;
+      font-size: 12px;
+      letter-spacing: 0.28em;
+      margin-bottom: 14px;
+    }
+
+    .draw-stage.is-idle .draw-eyebrow::before,
+    .draw-stage.is-idle .draw-eyebrow::after {
+      content: '';
+      width: 48px;
+      height: 2px;
+      background: rgba(203, 113, 130, 0.46);
+    }
+
+    .draw-stage.is-idle .draw-name {
+      max-width: 270px;
+      color: #2b1018;
+      font-size: 34px;
+      line-height: 1.08;
+    }
+
+    .draw-stage.is-idle .draw-meta {
+      max-width: 260px;
+      min-height: 0;
+      margin-top: 12px;
+      color: #6f5360;
+      font-size: 13px;
+      line-height: 1.35;
+    }
+
+    .draw-meta-divider {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      margin-bottom: 8px;
+      color: var(--accent);
+    }
+
+    .draw-meta-divider span {
+      width: 52px;
+      height: 2px;
+      background: rgba(203, 113, 130, 0.42);
+    }
+
+    .draw-meta-divider svg {
+      width: 26px;
+      height: 26px;
+      stroke-width: 1.7;
     }
 
     .draw-stage.is-running .draw-name {
@@ -1131,6 +1224,25 @@
 
       .draw-name {
         font-size: 32px;
+      }
+
+      .draw-stage.is-idle .draw-countdown-pill {
+        top: calc(50% - 145px + 10px);
+        min-width: 160px;
+        height: 52px;
+        font-size: 24px;
+      }
+
+      .draw-stage.is-idle .draw-circle {
+        padding-top: 80px;
+      }
+
+      .draw-stage.is-idle .draw-name {
+        font-size: 28px;
+      }
+
+      .draw-stage.is-idle .draw-meta {
+        font-size: 12px;
       }
     }
     /* ALSALAMA EDUCATION THEME OVERRIDES */
@@ -1632,13 +1744,20 @@
             </button>
           </div>
 
-          <div class="draw-stage" id="admin-draw-stage">
+          <div class="draw-stage is-idle" id="admin-draw-stage">
             <div class="draw-orbit"></div>
-            <div class="draw-countdown-pill" id="admin-draw-countdown">Ready</div>
+            <div class="draw-countdown-pill" id="admin-draw-countdown">
+              <span class="draw-pill-icon"><i data-lucide="gift"></i></span>
+              <span>Ready</span>
+            </div>
             <div class="draw-circle">
-              <div class="draw-eyebrow" id="admin-draw-status">Waiting</div>
-              <div class="draw-name" id="admin-draw-name">No draw yet</div>
-              <div class="draw-meta" id="admin-draw-meta">Load submissions, then start the draw.</div>
+              <div class="draw-eyebrow" id="admin-draw-status">STANDBY</div>
+              <div class="draw-name" id="admin-draw-name">Ready for the Lucky Draw</div>
+              <div class="draw-meta" id="admin-draw-meta">
+                <div class="draw-meta-divider"><span></span><i data-lucide="users-round"></i><span></span></div>
+                <div>Your entry is all set.</div>
+                <div>Stay tuned for the live shuffle!</div>
+              </div>
             </div>
           </div>
         </div>
@@ -2168,6 +2287,7 @@
 
       adminDrawStage.classList.toggle('is-running', mode === 'running');
       adminDrawStage.classList.toggle('is-complete', mode === 'complete');
+      adminDrawStage.classList.toggle('is-idle', mode === 'idle');
       updateDrawButtonState(mode);
 
       if (mode === 'running') {
@@ -2189,12 +2309,14 @@
         return;
       }
 
-      adminDrawCountdown.textContent = 'Ready';
-      adminDrawStatus.textContent = 'Waiting';
-      adminDrawName.textContent = currentLeads.length ? 'Ready to draw' : 'No users yet';
-      adminDrawMeta.textContent = currentLeads.length
-        ? `${currentLeads.length} submitted user${currentLeads.length === 1 ? '' : 's'} ready for the roll.`
-        : 'Load submissions, then start the draw.';
+      const participantLine = currentLeads.length
+        ? `${currentLeads.length} participant${currentLeads.length === 1 ? '' : 's'} are all set.`
+        : 'Your entry is all set.';
+      adminDrawCountdown.innerHTML = '<span class="draw-pill-icon"><i data-lucide="gift"></i></span><span>Ready</span>';
+      adminDrawStatus.textContent = 'STANDBY';
+      adminDrawName.textContent = 'Ready for the Lucky Draw';
+      adminDrawMeta.innerHTML = `<div class="draw-meta-divider"><span></span><i data-lucide="users-round"></i><span></span></div><div>${participantLine}</div><div>Stay tuned for the live shuffle!</div>`;
+      lucide.createIcons();
     }
 
     function syncDrawTicker() {
