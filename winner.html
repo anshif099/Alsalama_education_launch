@@ -1,0 +1,1367 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ALSALAMA | Live Lucky Draw</title>
+  <!-- Google Fonts: Inter and Outfit -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    /* CSS RESET & VARIABLES */
+    :root {
+      --primary: #b11229;
+      --primary-rgb: 177, 18, 41;
+      --primary-hover: #8f0d20;
+      --bg: #ffffff;
+      --text: #111827;
+      --text-muted: #6b7280;
+      --grid-line: rgba(0, 0, 0, 0.04);
+      --card-bg: rgba(255, 255, 255, 0.85);
+      --card-border: rgba(0, 0, 0, 0.08);
+      --input-bg: #f9fafb;
+      --input-border: #e5e7eb;
+      --shadow: 0 20px 40px rgba(0, 0, 0, 0.04);
+      --font-outfit: 'Outfit', sans-serif;
+      --font-inter: 'Inter', sans-serif;
+      --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      --header-height: 96px;
+      --page-pad-x: clamp(14px, 4vw, 48px);
+      --page-pad-y: clamp(10px, 1.8svh, 18px);
+      --card-pad: clamp(14px, 2.2svh, 30px);
+      --ring-size: clamp(220px, min(54svh, 44vw), 430px);
+      --mid-ring-size: calc(var(--ring-size) * 0.72);
+      --circle-size: calc(var(--ring-size) * 0.79);
+    }
+
+    [data-theme="dark"] {
+      --bg: #0b0f19;
+      --text: #f3f4f6;
+      --text-muted: #9ca3af;
+      --grid-line: rgba(255, 255, 255, 0.03);
+      --card-bg: rgba(17, 24, 39, 0.85);
+      --card-border: rgba(255, 255, 255, 0.06);
+      --input-bg: #1f2937;
+      --input-border: #374151;
+      --shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: var(--font-inter);
+      min-height: 100svh;
+      padding-top: var(--header-height);
+      overflow-x: hidden;
+      position: relative;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    /* GLOBAL GRID BACKGROUND */
+    .grid-bg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 1;
+      display: flex;
+      justify-content: space-around;
+    }
+
+    .grid-line {
+      width: 1px;
+      height: 100%;
+      background-color: var(--grid-line);
+      transition: background-color 0.3s ease;
+    }
+
+    /* HEADER styles */
+    header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      min-height: var(--header-height);
+      padding: 18px 8%;
+      z-index: 50;
+      background-color: var(--card-bg);
+      border-bottom: 1px solid var(--card-border);
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.03);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+    }
+
+    .logo-container {
+      display: flex;
+      flex-direction: column;
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .logo-main {
+      font-family: var(--font-outfit);
+      font-size: 26px;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      display: flex;
+      align-items: center;
+    }
+
+    .rain {
+      color: var(--text);
+      transition: color 0.3s ease;
+    }
+
+    .logo-i-wrapper {
+      position: relative;
+      display: inline-block;
+      width: 16px;
+      height: 28px;
+      margin: 0 1px;
+    }
+
+    .logo-i-dot {
+      position: absolute;
+      top: 4px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 5px;
+      height: 5px;
+      background-color: var(--primary);
+      border-radius: 50%;
+    }
+
+    .logo-i-stem {
+      position: absolute;
+      bottom: 4px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 5px;
+      height: 13px;
+      background-color: var(--primary);
+      border-radius: 2px;
+    }
+
+    .logo-i-ripples {
+      position: absolute;
+      bottom: 1px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 20px;
+      height: 6px;
+    }
+
+    .logo-i-ripples circle {
+      fill: none;
+      stroke: var(--primary);
+      stroke-width: 0.5;
+      transform-origin: center;
+      opacity: 0;
+      animation: rippleEffect 3s infinite ease-out;
+    }
+
+    .logo-i-ripples circle:nth-child(2) {
+      animation-delay: 1s;
+    }
+
+    .logo-i-ripples circle:nth-child(3) {
+      animation-delay: 2s;
+    }
+
+    @keyframes rippleEffect {
+      0% {
+        transform: scale(0.5);
+        opacity: 0;
+      }
+      50% {
+        opacity: 0.8;
+      }
+      100% {
+        transform: scale(2.2);
+        opacity: 0;
+      }
+    }
+
+    .hopes {
+      color: var(--text);
+      transition: color 0.3s ease;
+    }
+
+    .logo-subtext {
+      font-size: 9px;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-top: -2px;
+      transition: color 0.3s ease;
+    }
+
+    nav {
+      display: flex;
+      gap: 30px;
+    }
+
+    nav a {
+      text-decoration: none;
+      color: var(--text-muted);
+      font-size: 14px;
+      font-weight: 500;
+      transition: var(--transition);
+      position: relative;
+      padding: 6px 0;
+    }
+
+    nav a:hover, nav a.active {
+      color: var(--text);
+    }
+
+    nav a.active::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background-color: var(--primary);
+      border-radius: 2px;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .theme-toggle {
+      background: none;
+      border: none;
+      color: var(--text);
+      cursor: pointer;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid var(--card-border);
+      background-color: var(--card-bg);
+      backdrop-filter: blur(10px);
+      transition: var(--transition);
+    }
+
+    .theme-toggle:hover {
+      transform: scale(1.05);
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+
+    /* MAIN CONTAINER styles */
+    main {
+      position: relative;
+      z-index: 5;
+      width: min(100%, 1240px);
+      height: calc(100svh - var(--header-height));
+      margin: 0 auto;
+      padding: var(--page-pad-y) var(--page-pad-x);
+      text-align: center;
+      display: flex;
+    }
+
+    .winner-showcase-card {
+      background-color: var(--card-bg);
+      border: 1px solid var(--card-border);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-radius: 24px;
+      padding: 60px 40px;
+      box-shadow: var(--shadow);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .winner-showcase-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: linear-gradient(90deg, var(--primary) 0%, #cb7182 100%);
+    }
+
+    .trophy-box {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, rgba(177, 18, 41, 0.1) 0%, rgba(203, 113, 130, 0.1) 100%);
+      border: 1px solid rgba(177, 18, 41, 0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 30px auto;
+      color: var(--primary);
+      animation: float 3s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
+    }
+
+    .winner-showcase-card h1 {
+      font-family: var(--font-outfit);
+      font-size: 36px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      margin-bottom: 12px;
+      color: var(--text);
+    }
+
+    .winner-showcase-card p {
+      font-size: 15px;
+      color: var(--text-muted);
+      max-width: 500px;
+      margin: 0 auto 40px auto;
+      line-height: 1.6;
+    }
+
+    .empty-podium {
+      border: 1px dashed var(--card-border);
+      border-radius: 16px;
+      padding: 40px 20px;
+      background-color: var(--input-bg);
+      margin-bottom: 40px;
+      transition: background-color 0.3s ease, border-color 0.3s ease;
+    }
+
+    .empty-podium h3 {
+      font-family: var(--font-outfit);
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 6px;
+      color: var(--text);
+    }
+
+    .empty-podium p {
+      font-size: 13px;
+      color: var(--text-muted);
+      max-width: 340px;
+      margin: 0 auto;
+      line-height: 1.5;
+    }
+
+    .btn-action-home {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background-color: var(--text);
+      color: var(--bg);
+      padding: 14px 28px;
+      border-radius: 30px;
+      font-size: 14px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: var(--transition);
+      border: 1px solid transparent;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+      cursor: pointer;
+    }
+
+    .btn-action-home:hover {
+      background-color: var(--primary);
+      color: #ffffff;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(177, 18, 41, 0.3);
+    }
+
+    .btn-action-home svg {
+      transition: transform 0.3s ease;
+      margin-left: 8px;
+    }
+
+    .btn-action-home:hover svg {
+      transform: translateX(4px);
+    }
+
+    .winner-showcase-card.draw-only {
+      width: 100%;
+      height: 100%;
+      padding: var(--card-pad);
+      border-radius: 22px;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .draw-header {
+      flex: 0 0 auto;
+      margin-bottom: clamp(10px, 1.8svh, 18px);
+    }
+
+    .draw-kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(var(--primary-rgb), 0.18);
+      background-color: rgba(var(--primary-rgb), 0.07);
+      color: var(--primary);
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      margin-bottom: clamp(8px, 1.3svh, 14px);
+    }
+
+    .winner-showcase-card.draw-only h1 {
+      font-size: clamp(26px, 4.1svh, 36px);
+      margin-bottom: clamp(4px, 0.7svh, 8px);
+    }
+
+    .winner-showcase-card.draw-only p {
+      font-size: clamp(12px, 1.8svh, 15px);
+      margin-bottom: 0;
+    }
+
+    .draw-stage {
+      flex: 1 1 auto;
+      min-height: 0;
+      height: auto;
+      border: 1px solid var(--card-border);
+      border-radius: 22px;
+      background:
+        radial-gradient(circle at center, rgba(var(--primary-rgb), 0.12), transparent 34%),
+        linear-gradient(135deg, rgba(var(--primary-rgb), 0.06), rgba(16, 185, 129, 0.05));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .draw-stage::before,
+    .draw-stage::after {
+      content: '';
+      position: absolute;
+      border-radius: 50%;
+      border: 1px solid rgba(var(--primary-rgb), 0.2);
+      pointer-events: none;
+    }
+
+    .draw-stage::before {
+      width: var(--ring-size);
+      height: var(--ring-size);
+    }
+
+    .draw-stage::after {
+      width: var(--mid-ring-size);
+      height: var(--mid-ring-size);
+      border-style: dashed;
+      opacity: 0.6;
+    }
+
+    .draw-orbit {
+      position: absolute;
+      width: var(--ring-size);
+      height: var(--ring-size);
+      border-radius: 50%;
+      animation: drawSpin 7s linear infinite;
+      animation-play-state: paused;
+    }
+
+    .draw-orbit::before,
+    .draw-orbit::after {
+      content: '';
+      position: absolute;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background-color: var(--primary);
+      box-shadow: 0 0 28px rgba(var(--primary-rgb), 0.6);
+    }
+
+    .draw-orbit::before {
+      top: -8px;
+      left: calc(50% - 8px);
+    }
+
+    .draw-orbit::after {
+      bottom: -8px;
+      left: calc(50% - 8px);
+      background-color: #10b981;
+      box-shadow: 0 0 28px rgba(16, 185, 129, 0.55);
+    }
+
+    .draw-stage.is-running .draw-orbit {
+      animation-duration: 1.1s;
+      animation-play-state: running;
+    }
+
+    .draw-circle {
+      width: var(--circle-size);
+      height: var(--circle-size);
+      border-radius: 50%;
+      background-color: var(--card-bg);
+      border: 1px solid rgba(var(--primary-rgb), 0.25);
+      box-shadow: 0 28px 80px rgba(177, 18, 41, 0.16);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: clamp(22px, 4svh, 34px);
+      text-align: center;
+      position: relative;
+      z-index: 2;
+      backdrop-filter: blur(16px);
+    }
+
+    .draw-countdown-pill {
+      position: absolute;
+      top: clamp(12px, 3svh, 28px);
+      left: 50%;
+      transform: translateX(-50%);
+      min-width: clamp(76px, 9vw, 92px);
+      height: clamp(32px, 5svh, 38px);
+      padding: 0 clamp(14px, 2vw, 18px);
+      border-radius: 999px;
+      border: 1px solid rgba(var(--primary-rgb), 0.22);
+      background-color: var(--card-bg);
+      color: var(--primary);
+      font-family: var(--font-outfit);
+      font-size: clamp(16px, 2.5svh, 20px);
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 3;
+      box-shadow: var(--shadow);
+    }
+
+    .draw-eyebrow {
+      font-size: clamp(9px, 1.5svh, 11px);
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--text-muted);
+      margin-bottom: clamp(8px, 1.6svh, 12px);
+    }
+
+    .draw-name {
+      font-family: var(--font-outfit);
+      font-size: clamp(28px, 6svh, 42px);
+      line-height: 1.05;
+      font-weight: 800;
+      letter-spacing: 0;
+      color: var(--text);
+      max-width: calc(var(--circle-size) - 56px);
+      word-break: break-word;
+    }
+
+    .draw-meta {
+      min-height: clamp(28px, 5svh, 38px);
+      margin-top: clamp(8px, 1.8svh, 14px);
+      color: var(--text-muted);
+      font-size: clamp(11px, 1.8svh, 13px);
+      line-height: 1.45;
+      max-width: 250px;
+    }
+
+    .draw-stage.is-running .draw-name {
+      color: var(--primary);
+    }
+
+    .draw-stage.is-complete .draw-circle {
+      border-color: rgba(16, 185, 129, 0.35);
+      box-shadow: 0 28px 80px rgba(16, 185, 129, 0.16);
+    }
+
+    .draw-stage.is-complete .draw-countdown-pill {
+      color: #059669;
+      border-color: rgba(16, 185, 129, 0.28);
+    }
+
+    @keyframes drawSpin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    @media (max-width: 640px) {
+      :root {
+        --header-height: 84px;
+        --page-pad-x: 10px;
+        --page-pad-y: 10px;
+        --card-pad: 12px;
+        --ring-size: clamp(238px, 82vw, 350px);
+      }
+
+      body {
+        padding-top: var(--header-height);
+      }
+      header {
+        min-height: var(--header-height);
+        padding: 14px 5%;
+      }
+      nav {
+        gap: 15px;
+      }
+      main {
+        height: calc(100svh - var(--header-height));
+      }
+      .winner-showcase-card {
+        padding: 40px 20px;
+      }
+      .winner-showcase-card h1 {
+        font-size: 28px;
+      }
+      .winner-showcase-card.draw-only {
+        padding: var(--card-pad);
+      }
+      .draw-stage {
+        border-radius: 18px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      :root {
+        --header-height: 76px;
+        --ring-size: clamp(210px, 84vw, 310px);
+      }
+
+      header {
+        padding: 12px 14px;
+        gap: 10px;
+      }
+
+      .logo-main {
+        font-size: 22px;
+      }
+
+      .logo-i-wrapper {
+        width: 13px;
+        height: 24px;
+      }
+
+      .logo-subtext {
+        display: none;
+      }
+
+      nav {
+        gap: 14px;
+      }
+
+      nav a {
+        font-size: 13px;
+      }
+
+      .theme-toggle {
+        width: 36px;
+        height: 36px;
+      }
+    }
+
+    @media (max-height: 700px) {
+      :root {
+        --header-height: 78px;
+        --page-pad-y: 8px;
+        --card-pad: 12px;
+        --ring-size: clamp(210px, min(50svh, 40vw), 350px);
+      }
+
+      header {
+        min-height: var(--header-height);
+        padding-top: 12px;
+        padding-bottom: 12px;
+      }
+
+      .draw-kicker {
+        display: none;
+      }
+
+      .draw-header {
+        margin-bottom: 8px;
+      }
+    }
+
+    @media (max-height: 520px) {
+      :root {
+        --header-height: 64px;
+        --page-pad-y: 6px;
+        --card-pad: 8px;
+        --ring-size: clamp(150px, min(42svh, 36vw), 240px);
+      }
+
+      header {
+        padding-top: 8px;
+        padding-bottom: 8px;
+      }
+
+      .logo-subtext,
+      .draw-header {
+        display: none;
+      }
+
+      .logo-main {
+        font-size: 22px;
+      }
+    }
+    /* ALSALAMA EDUCATION THEME OVERRIDES */
+    :root {
+      --primary: #b11229;
+      --primary-rgb: 177, 18, 41;
+      --primary-hover: #8f0d20;
+      --accent: #cb7182;
+      --bg: #fff7f8;
+      --text: #2b1018;
+      --text-muted: #785663;
+      --grid-line: rgba(177, 18, 41, 0.06);
+      --card-bg: #ffffff;
+      --card-border: rgba(177, 18, 41, 0.14);
+      --input-bg: #fff8f9;
+      --input-border: #ead0d7;
+      --shadow: 0 22px 55px rgba(76, 13, 26, 0.12);
+      --top-strip-height: 46px;
+      --header-bar-height: 106px;
+      --header-height: calc(var(--top-strip-height) + var(--header-bar-height));
+    }
+
+    [data-theme="dark"] {
+      --bg: #17070c;
+      --text: #fff8fa;
+      --text-muted: #f0bdc8;
+      --grid-line: rgba(255, 255, 255, 0.04);
+      --card-bg: #2a0e17;
+      --card-border: rgba(255, 255, 255, 0.12);
+      --input-bg: #210b12;
+      --input-border: rgba(255, 255, 255, 0.16);
+      --shadow: 0 22px 55px rgba(0, 0, 0, 0.3);
+    }
+
+    body {
+      background: var(--bg);
+      letter-spacing: 0;
+      padding-top: var(--header-height);
+    }
+
+    .top-strip {
+      position: fixed;
+      inset: 0 0 auto 0;
+      height: var(--top-strip-height);
+      z-index: 80;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 clamp(18px, 7vw, 94px);
+      background: var(--primary);
+      color: #ffffff;
+      font-weight: 800;
+      font-size: 16px;
+    }
+
+    .top-strip a {
+      color: inherit;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .top-strip-left,
+    .top-strip-right {
+      display: flex;
+      align-items: center;
+      gap: clamp(18px, 2.8vw, 34px);
+    }
+
+    .top-dot {
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.32);
+      flex: 0 0 auto;
+    }
+
+    header {
+      top: var(--top-strip-height);
+      min-height: var(--header-bar-height);
+      padding: 22px clamp(18px, 7vw, 94px);
+      background: #ffffff;
+      border-bottom: 1px solid rgba(177, 18, 41, 0.08);
+      box-shadow: 0 12px 32px rgba(76, 13, 26, 0.08);
+      backdrop-filter: none;
+      -webkit-backdrop-filter: none;
+    }
+
+    [data-theme="dark"] header {
+      background: #230b13;
+    }
+
+    .logo-container {
+      position: relative;
+      min-width: 280px;
+      padding-left: 0;
+      flex-direction: row;
+      align-items: center;
+      justify-content: flex-start;
+      min-height: 0;
+    }
+
+    .logo-container::before {
+      content: none;
+      position: absolute;
+      left: 0;
+      top: 50%;
+      width: 54px;
+      height: 54px;
+      transform: translateY(-50%);
+      border: 4px solid var(--primary);
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      color: var(--primary);
+      font-family: var(--font-outfit);
+      font-size: 32px;
+      font-weight: 800;
+      line-height: 1;
+    }
+
+    .logo-image {
+      display: block;
+      width: clamp(230px, 27vw, 380px);
+      max-height: 82px;
+      height: auto;
+      object-fit: contain;
+    }
+
+    .logo-container .logo-main,
+    .logo-container .logo-subtext {
+      display: none;
+    }
+
+    .logo-main {
+      gap: 0;
+      font-size: 0;
+      letter-spacing: 0;
+    }
+
+    .logo-main::before {
+      content: "ALSALAMA";
+      color: var(--primary);
+      font-size: clamp(30px, 3vw, 42px);
+      font-weight: 800;
+      letter-spacing: 0.02em;
+    }
+
+    .logo-main > * {
+      display: none;
+    }
+
+    .logo-subtext {
+      color: var(--text);
+      font-size: 0;
+      letter-spacing: 0.02em;
+      margin-top: -1px;
+    }
+
+    .logo-subtext::before {
+      content: "INSTITUTE OF ADVANCED STUDIES (ASIAS)";
+      font-size: 10px;
+      font-weight: 800;
+    }
+
+    nav {
+      gap: clamp(16px, 2.2vw, 34px);
+    }
+
+    nav a {
+      color: var(--primary);
+      font-size: 17px;
+      font-weight: 800;
+      padding: 10px 0;
+    }
+
+    nav a:hover,
+    nav a.active {
+      color: var(--accent);
+    }
+
+    nav a.active::after {
+      height: 3px;
+      background: var(--accent);
+      border-radius: 3px;
+    }
+
+    .header-cta {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 58px;
+      padding: 0 36px;
+      border-radius: 8px 8px 0 8px;
+      background: var(--accent);
+      color: #ffffff;
+      font-size: 18px;
+      font-weight: 800;
+      text-decoration: none;
+      box-shadow: 0 12px 28px rgba(177, 18, 41, 0.18);
+    }
+
+    .theme-toggle {
+      width: 46px;
+      height: 46px;
+      color: var(--primary);
+      border-color: rgba(177, 18, 41, 0.18);
+      background: #fff8f9;
+    }
+
+    main {
+      height: calc(100svh - var(--header-height));
+      padding: clamp(16px, 2.2vw, 30px) var(--page-pad-x);
+    }
+
+    @media (min-width: 901px) {
+      :root {
+        --top-strip-height: 42px;
+        --header-bar-height: 104px;
+        --header-height: calc(var(--top-strip-height) + var(--header-bar-height));
+      }
+
+      .top-strip {
+        padding: 0 clamp(18px, 6vw, 84px);
+        font-size: clamp(13px, 1vw, 16px);
+      }
+
+      header {
+        padding: 14px clamp(18px, 6vw, 84px);
+      }
+
+      main {
+        padding: 18px var(--page-pad-x);
+      }
+    }
+
+    .winner-showcase-card {
+      background: #edf6fb;
+      border-color: rgba(177, 18, 41, 0.1);
+      border-radius: 8px;
+      box-shadow: none;
+    }
+
+    [data-theme="dark"] .winner-showcase-card {
+      background: #260f17;
+    }
+
+    .winner-showcase-card::before {
+      background: var(--primary);
+    }
+
+    .draw-kicker {
+      border-color: rgba(177, 18, 41, 0.18);
+      background: rgba(177, 18, 41, 0.07);
+      color: var(--accent);
+      letter-spacing: 0.08em;
+    }
+
+    .winner-showcase-card.draw-only h1 {
+      color: var(--primary);
+      letter-spacing: 0;
+    }
+
+    .draw-stage {
+      border-radius: 8px;
+      border-color: rgba(177, 18, 41, 0.14);
+      background:
+        radial-gradient(circle at center, rgba(255, 255, 255, 0.72), transparent 36%),
+        linear-gradient(135deg, #ffffff 0%, #f7e6ea 100%);
+    }
+
+    [data-theme="dark"] .draw-stage {
+      background:
+        radial-gradient(circle at center, rgba(76, 13, 26, 0.8), transparent 36%),
+        linear-gradient(135deg, #240b13 0%, #3a101d 100%);
+    }
+
+    .draw-stage::before,
+    .draw-stage::after {
+      border-color: rgba(177, 18, 41, 0.2);
+    }
+
+    .draw-orbit::before,
+    .draw-orbit::after {
+      background: var(--primary);
+      box-shadow: 0 0 28px rgba(177, 18, 41, 0.55);
+    }
+
+    .draw-orbit::after {
+      background: var(--accent);
+      box-shadow: 0 0 28px rgba(203, 113, 130, 0.5);
+    }
+
+    .draw-circle {
+      border-color: rgba(177, 18, 41, 0.24);
+      box-shadow: 0 28px 80px rgba(177, 18, 41, 0.14);
+    }
+
+    .draw-countdown-pill {
+      border-color: rgba(177, 18, 41, 0.22);
+      color: var(--primary);
+    }
+
+    .draw-stage.is-running .draw-name {
+      color: var(--primary);
+    }
+
+    .draw-stage.is-complete .draw-circle {
+      border-color: rgba(177, 18, 41, 0.35);
+      box-shadow: 0 28px 80px rgba(177, 18, 41, 0.16);
+    }
+
+    .draw-stage.is-complete .draw-countdown-pill {
+      color: var(--primary);
+      border-color: rgba(177, 18, 41, 0.28);
+    }
+
+    @media (max-width: 900px) {
+      nav {
+        display: none;
+      }
+
+      .header-cta {
+        display: none;
+      }
+    }
+
+    @media (max-width: 640px) {
+      :root {
+        --top-strip-height: 38px;
+        --header-bar-height: 86px;
+        --header-height: calc(var(--top-strip-height) + var(--header-bar-height));
+      }
+
+      .top-strip {
+        padding: 0 14px;
+        font-size: 12px;
+      }
+
+      .top-strip-left a:nth-of-type(2),
+      .top-strip-left .top-dot:nth-of-type(2),
+      .top-strip-right {
+        display: none;
+      }
+
+      header {
+        padding: 14px;
+      }
+
+      .logo-container {
+        min-width: 0;
+        padding-left: 0;
+      }
+
+      .logo-container::before {
+        display: none;
+      }
+
+      .logo-image {
+        width: clamp(190px, 58vw, 260px);
+        max-height: 58px;
+      }
+
+      .logo-main::before {
+        font-size: 25px;
+      }
+
+      .logo-subtext::before {
+        font-size: 7px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- GLOBAL GRID BACKGROUND -->
+  <div class="grid-bg">
+    <div class="grid-line"></div>
+    <div class="grid-line"></div>
+    <div class="grid-line"></div>
+    <div class="grid-line"></div>
+    <div class="grid-line"></div>
+    <div class="grid-line"></div>
+  </div>
+
+  <div class="top-strip" aria-label="ALSALAMA quick links">
+    <div class="top-strip-left">
+      <a href="#">Conditions</a>
+      <span class="top-dot"></span>
+      <a href="#">Quality</a>
+      <span class="top-dot"></span>
+      <a href="#">Stay Connected</a>
+    </div>
+    <div class="top-strip-right">
+      <a href="#">Facebook</a>
+      <span class="top-dot"></span>
+      <a href="#">Instagram</a>
+      <span class="top-dot"></span>
+      <a href="#">Youtube</a>
+    </div>
+  </div>
+
+  <!-- HEADER -->
+  <header>
+    <a href="index.html" class="logo-container">
+      <img src="alsalama.png" alt="ALSALAMA Institute of Advanced Studies (ASIAS)" class="logo-image">
+      <div class="logo-main">
+        <span class="rain">rain</span>
+        <div class="logo-i-wrapper">
+          <div class="logo-i-dot"></div>
+          <div class="logo-i-stem"></div>
+          <svg class="logo-i-ripples" viewBox="0 0 20 6">
+            <circle cx="10" cy="3" r="1"></circle>
+            <circle cx="10" cy="3" r="3.5"></circle>
+            <circle cx="10" cy="3" r="6"></circle>
+          </svg>
+        </div>
+        <span class="hopes">hopes</span>
+        <span style="font-size: 10px; font-weight: 700; align-self: flex-start; margin-top: 4px; color: var(--primary);">®</span>
+      </div>
+      <div class="logo-subtext">Institute of Advanced Studies (ASIAS)</div>
+    </a>
+
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="winner.html" class="active">Winner</a>
+    </nav>
+
+    <div class="header-actions">
+      <a class="header-cta" href="https://alsalamaeducation.com/courses/">Courses</a>
+      <!-- Dark mode switch -->
+      <button class="theme-toggle" id="theme-btn" aria-label="Toggle Theme">
+        <i data-lucide="moon"></i>
+      </button>
+    </div>
+  </header>
+
+  <!-- MAIN WRAPPER -->
+  <main>
+    <div class="winner-showcase-card draw-only">
+      <div class="draw-header">
+        <div class="draw-kicker">
+          <i data-lucide="radio" style="width: 13px; height: 13px;"></i>
+          <span>Live Draw</span>
+        </div>
+        <h1>Live Lucky Draw</h1>
+        <p id="public-draw-summary">Watch the same 30 second shuffle running from the admin screen.</p>
+      </div>
+
+      <div class="draw-stage" id="public-draw-stage">
+        <div class="draw-orbit"></div>
+        <div class="draw-countdown-pill" id="public-draw-countdown">Ready</div>
+        <div class="draw-circle">
+          <div class="draw-eyebrow" id="public-draw-status">Waiting</div>
+          <div class="draw-name" id="public-draw-name">No draw yet</div>
+          <div class="draw-meta" id="public-draw-meta">The live shuffle will appear here when the admin starts.</div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
+  <script>
+    // Initialize Lucide Icons
+    lucide.createIcons();
+
+    // DARK & LIGHT MODE TOGGLE
+    const themeBtn = document.getElementById('theme-btn');
+    const htmlEl = document.documentElement;
+
+    // Sync theme on page load
+    const savedTheme = localStorage.getItem('alsalama-theme') || 'light';
+    htmlEl.setAttribute('data-theme', savedTheme);
+    updateThemeIcon(savedTheme);
+
+    themeBtn.addEventListener('click', () => {
+      const currentTheme = htmlEl.getAttribute('data-theme');
+      const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+      htmlEl.setAttribute('data-theme', newTheme);
+      localStorage.setItem('alsalama-theme', newTheme);
+      updateThemeIcon(newTheme);
+    });
+
+    function updateThemeIcon(theme) {
+      if (theme === 'dark') {
+        themeBtn.innerHTML = '<i data-lucide="sun"></i>';
+      } else {
+        themeBtn.innerHTML = '<i data-lucide="moon"></i>';
+      }
+      lucide.createIcons();
+    }
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyB8_D9UEcLlxJffJ4ipf3YVlO9scRXbVLc",
+      authDomain: "alsalama-education.firebaseapp.com",
+      databaseURL: "https://alsalama-education-default-rtdb.firebaseio.com",
+      projectId: "alsalama-education",
+      storageBucket: "alsalama-education.firebasestorage.app",
+      messagingSenderId: "488399270433",
+      appId: "1:488399270433:web:a791f62dea8545b6cde960",
+      measurementId: "G-E2YYRZGTLC"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+    const LEADS_PATH = 'form';
+    const DRAW_NODE_KEY = '__drawCurrent';
+    const DRAW_PATH = `${LEADS_PATH}/${DRAW_NODE_KEY}`;
+
+    const publicDrawSummary = document.getElementById('public-draw-summary');
+    const publicDrawStage = document.getElementById('public-draw-stage');
+    const publicDrawCountdown = document.getElementById('public-draw-countdown');
+    const publicDrawStatus = document.getElementById('public-draw-status');
+    const publicDrawName = document.getElementById('public-draw-name');
+    const publicDrawMeta = document.getElementById('public-draw-meta');
+
+    let publicLeads = [];
+    let publicDrawState = null;
+    let publicTicker = null;
+    let serverTimeOffset = 0;
+
+    function normalizeLead(firebaseId, rawLead = {}) {
+      rawLead = rawLead || {};
+      const createdAt = Number(rawLead.createdAt) || Date.parse(rawLead.date) || 0;
+      return {
+        firebaseId: firebaseId,
+        id: rawLead.id || firebaseId,
+        name: rawLead.name || 'Unnamed Applicant',
+        phone: rawLead.phone || '-',
+        date: rawLead.date || (createdAt ? new Date(createdAt).toLocaleString() : '-'),
+        createdAt: createdAt
+      };
+    }
+
+    db.ref(LEADS_PATH).on('value', (snapshot) => {
+      const data = snapshot.val();
+      publicLeads = data
+        ? Object.keys(data)
+          .filter(key => key !== DRAW_NODE_KEY && !(data[key] && data[key].type === 'draw-state'))
+          .map(key => normalizeLead(key, data[key]))
+        : [];
+      publicLeads.sort((a, b) => (b.createdAt || Date.parse(b.date) || 0) - (a.createdAt || Date.parse(a.date) || 0));
+      renderPublicDrawState();
+    }, (error) => {
+      console.error("Firebase submissions read error:", error);
+      publicLeads = [];
+      publicDrawSummary.textContent = 'Live participant names are unavailable right now.';
+      renderPublicDrawState();
+    });
+
+    db.ref(DRAW_PATH).on('value', (snapshot) => {
+      publicDrawState = snapshot.val();
+      renderPublicDrawState();
+      syncPublicTicker();
+    }, (error) => {
+      console.error("Firebase draw read error:", error);
+      publicDrawSummary.textContent = 'The live draw is unavailable right now.';
+    });
+
+    db.ref('.info/serverTimeOffset').on('value', (snapshot) => {
+      serverTimeOffset = Number(snapshot.val()) || 0;
+      renderPublicDrawState();
+      syncPublicTicker();
+    });
+
+    function getSyncedNow() {
+      return Date.now() + serverTimeOffset;
+    }
+
+    function getDrawPool(state) {
+      const participants = Array.isArray(state && state.participants) ? state.participants : [];
+      return participants.length ? participants : publicLeads;
+    }
+
+    function getDrawMode(state) {
+      if (!state || !state.status) return 'idle';
+      const endsAt = Number(state.endsAt) || 0;
+      if (state.status === 'running') {
+        return getSyncedNow() < endsAt ? 'running' : (state.winner ? 'complete' : 'idle');
+      }
+      return state.status === 'complete' && state.winner ? 'complete' : 'idle';
+    }
+
+    function getLiveShuffleLead(state) {
+      const drawPool = getDrawPool(state);
+      if (!drawPool.length) return null;
+      const startedAt = Number(state && state.startedAt) || getSyncedNow();
+      const step = Math.max(0, Math.floor((getSyncedNow() - startedAt) / 120));
+      return drawPool[step % drawPool.length];
+    }
+
+    function renderPublicDrawState() {
+      const state = publicDrawState || {};
+      const mode = getDrawMode(state);
+      const participantCount = Number(state.participantCount) || getDrawPool(state).length || publicLeads.length;
+
+      publicDrawStage.classList.toggle('is-running', mode === 'running');
+      publicDrawStage.classList.toggle('is-complete', mode === 'complete');
+
+      if (mode === 'running') {
+        const remainingMs = Math.max(0, Number(state.endsAt) - getSyncedNow());
+        const liveLead = getLiveShuffleLead(state);
+        publicDrawSummary.textContent = 'Live draw in progress.';
+        publicDrawCountdown.textContent = String(Math.ceil(remainingMs / 1000));
+        publicDrawStatus.textContent = 'Shuffling Live';
+        publicDrawName.textContent = liveLead ? liveLead.name : 'Shuffling...';
+        publicDrawMeta.textContent = `Selecting from ${participantCount} submitted user${participantCount === 1 ? '' : 's'}.`;
+        return;
+      }
+
+      if (mode === 'complete') {
+        const winner = state.winner || {};
+        publicDrawSummary.textContent = 'Winner selected.';
+        publicDrawCountdown.textContent = 'Winner';
+        publicDrawStatus.textContent = 'Selected Winner';
+        publicDrawName.textContent = winner.name || 'Winner Selected';
+        publicDrawMeta.textContent = winner.phone ? `Phone: ${winner.phone}` : 'The draw has stopped on this user.';
+        return;
+      }
+
+      publicDrawSummary.textContent = 'Watch the same 30 second shuffle running from the admin screen.';
+      publicDrawCountdown.textContent = 'Ready';
+      publicDrawStatus.textContent = 'Waiting';
+      publicDrawName.textContent = publicLeads.length ? 'Waiting' : 'No users yet';
+      publicDrawMeta.textContent = publicLeads.length
+        ? `${publicLeads.length} submitted user${publicLeads.length === 1 ? '' : 's'} ready.`
+        : 'The live shuffle will appear here when the admin starts.';
+    }
+
+    function syncPublicTicker() {
+      clearInterval(publicTicker);
+      const mode = getDrawMode(publicDrawState);
+      if (mode !== 'running') return;
+
+      publicTicker = setInterval(() => {
+        renderPublicDrawState();
+        const endsAt = Number(publicDrawState && publicDrawState.endsAt) || 0;
+        if (getSyncedNow() >= endsAt) {
+          clearInterval(publicTicker);
+          publicTicker = null;
+          renderPublicDrawState();
+        }
+      }, 150);
+    }
+  </script>
+</body>
+</html>
