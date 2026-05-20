@@ -440,6 +440,15 @@
       margin-bottom: 0;
     }
 
+    .summary-line {
+      display: block;
+      line-height: 1.5;
+    }
+
+    .summary-gap {
+      margin-top: 18px;
+    }
+
     .draw-stage {
       flex: 1 1 auto;
       min-height: 0;
@@ -554,6 +563,23 @@
       box-shadow: var(--shadow);
     }
 
+    .draw-pill-icon {
+      width: clamp(36px, 5.4svh, 48px);
+      height: clamp(36px, 5.4svh, 48px);
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--primary);
+      color: #ffffff;
+      flex: 0 0 auto;
+    }
+
+    .draw-pill-icon svg {
+      width: 52%;
+      height: 52%;
+    }
+
     .draw-eyebrow {
       font-size: clamp(9px, 1.5svh, 11px);
       font-weight: 800;
@@ -581,6 +607,83 @@
       font-size: clamp(11px, 1.8svh, 13px);
       line-height: 1.45;
       max-width: 250px;
+    }
+
+    .draw-stage.is-idle .draw-countdown-pill {
+      top: clamp(18px, 9%, 42px);
+      min-width: clamp(190px, 24vw, 260px);
+      height: clamp(58px, 8svh, 76px);
+      gap: clamp(12px, 1.8vw, 18px);
+      padding: 0 clamp(18px, 2.8vw, 26px);
+      background: rgba(255, 255, 255, 0.88);
+      border-color: rgba(177, 18, 41, 0.18);
+      font-size: clamp(28px, 5svh, 42px);
+      box-shadow: 0 20px 45px rgba(76, 13, 26, 0.08);
+    }
+
+    .draw-stage.is-idle .draw-circle {
+      background: rgba(255, 255, 255, 0.94);
+      box-shadow: 0 36px 90px rgba(76, 13, 26, 0.09);
+      justify-content: flex-start;
+      padding-top: clamp(88px, 12svh, 118px);
+      padding-left: clamp(24px, 3.4svh, 42px);
+      padding-right: clamp(24px, 3.4svh, 42px);
+    }
+
+    .draw-stage.is-idle .draw-eyebrow {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: clamp(14px, 2.4vw, 28px);
+      color: #6f5360;
+      font-size: clamp(12px, 1.8svh, 16px);
+      letter-spacing: 0.28em;
+      margin-bottom: clamp(12px, 2svh, 18px);
+      width: min(100%, 360px);
+    }
+
+    .draw-stage.is-idle .draw-eyebrow::before,
+    .draw-stage.is-idle .draw-eyebrow::after {
+      content: '';
+      width: clamp(40px, 7vw, 78px);
+      height: 2px;
+      background: rgba(203, 113, 130, 0.46);
+    }
+
+    .draw-stage.is-idle .draw-name {
+      max-width: min(100%, 560px);
+      color: #2b1018;
+      font-size: clamp(26px, 5svh, 42px);
+      line-height: 1.08;
+    }
+
+    .draw-stage.is-idle .draw-meta {
+      max-width: min(420px, calc(var(--circle-size) - 60px));
+      margin-top: clamp(12px, 2svh, 18px);
+      color: #6f5360;
+      font-size: clamp(12px, 1.9svh, 16px);
+      line-height: 1.35;
+    }
+
+    .draw-meta-divider {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: clamp(14px, 2.5vw, 28px);
+      margin-bottom: clamp(8px, 1.4svh, 12px);
+      color: var(--accent);
+    }
+
+    .draw-meta-divider span {
+      width: clamp(56px, 9vw, 96px);
+      height: 2px;
+      background: rgba(203, 113, 130, 0.42);
+    }
+
+    .draw-meta-divider svg {
+      width: clamp(24px, 3.8svh, 34px);
+      height: clamp(24px, 3.8svh, 34px);
+      stroke-width: 1.7;
     }
 
     .draw-stage.is-running .draw-name {
@@ -1088,6 +1191,62 @@
       .logo-subtext::before {
         font-size: 7px;
       }
+
+      .draw-stage.is-idle .draw-countdown-pill {
+        top: 12px;
+        min-width: 148px;
+        height: 50px;
+        font-size: 22px;
+        gap: 10px;
+        padding: 0 14px;
+      }
+
+      .draw-pill-icon {
+        width: 34px;
+        height: 34px;
+      }
+
+      .draw-stage.is-idle .draw-circle {
+        padding-top: clamp(58px, 18vw, 72px);
+        padding-left: 20px;
+        padding-right: 20px;
+      }
+
+      .draw-stage.is-idle .draw-eyebrow {
+        font-size: 10px;
+        gap: 10px;
+        margin-bottom: 8px;
+      }
+
+      .draw-stage.is-idle .draw-eyebrow::before,
+      .draw-stage.is-idle .draw-eyebrow::after {
+        width: 28px;
+      }
+
+      .draw-stage.is-idle .draw-name {
+        max-width: calc(var(--circle-size) - 38px);
+        font-size: clamp(21px, 7.4vw, 28px);
+      }
+
+      .draw-stage.is-idle .draw-meta {
+        max-width: calc(var(--circle-size) - 40px);
+        margin-top: 8px;
+        font-size: 11px;
+      }
+
+      .draw-meta-divider {
+        gap: 10px;
+        margin-bottom: 8px;
+      }
+
+      .draw-meta-divider span {
+        width: 34px;
+      }
+
+      .draw-meta-divider svg {
+        width: 24px;
+        height: 24px;
+      }
     }
   </style>
 </head>
@@ -1164,16 +1323,23 @@
           <span>Live Draw</span>
         </div>
         <h1>Live Lucky Draw</h1>
-        <p id="public-draw-summary">Thank you for participating in the lucky draw! 🎉<br>Your entry has been successfully submitted.<br><br>Please stay tuned and wait for the live shuffle. The final winner will be announced shortly.</p>
+        <p id="public-draw-summary"><span class="summary-line">Thank you for participating in the lucky draw! &#127881;</span><span class="summary-line">Your entry has been successfully submitted.</span><span class="summary-line summary-gap">Please stay tuned and wait for the live shuffle.</span><span class="summary-line">The final winner will be announced shortly.</span></p>
       </div>
 
-      <div class="draw-stage" id="public-draw-stage">
+      <div class="draw-stage is-idle" id="public-draw-stage">
         <div class="draw-orbit"></div>
-        <div class="draw-countdown-pill" id="public-draw-countdown">Ready</div>
+        <!--<div class="draw-countdown-pill" id="public-draw-countdown">
+          <span class="draw-pill-icon"><i data-lucide="gift"></i></span>
+          <span>Ready</span>
+        </div>-->
         <div class="draw-circle">
-          <div class="draw-eyebrow" id="public-draw-status">Waiting</div>
-          <div class="draw-name" id="public-draw-name">No draw yet</div>
-          <div class="draw-meta" id="public-draw-meta">The live shuffle will appear here when the admin starts.</div>
+          <div class="draw-eyebrow" id="public-draw-status">STANDBY</div>
+          <div class="draw-name" id="public-draw-name">Ready for the Lucky Draw</div>
+          <div class="draw-meta" id="public-draw-meta">
+            <div class="draw-meta-divider"><span></span><i data-lucide="users-round"></i><span></span></div>
+            <div>Your entry is all set.</div>
+            <div>Stay tuned for the live shuffle!</div>
+          </div>
         </div>
       </div>
     </div>
@@ -1317,6 +1483,7 @@
 
       publicDrawStage.classList.toggle('is-running', mode === 'running');
       publicDrawStage.classList.toggle('is-complete', mode === 'complete');
+      publicDrawStage.classList.toggle('is-idle', mode === 'idle');
 
       if (mode === 'running') {
         const remainingMs = Math.max(0, Number(state.endsAt) - getSyncedNow());
@@ -1339,13 +1506,16 @@
         return;
       }
 
-      publicDrawSummary.innerHTML = 'Thank you for participating in the lucky draw! 🎉<br>Your entry has been successfully submitted.<br><br>Please stay tuned and wait for the live shuffle. The final winner will be announced shortly.';
-      publicDrawCountdown.textContent = 'Ready';
-      publicDrawStatus.textContent = 'Waiting';
-      publicDrawName.textContent = publicLeads.length ? 'Waiting' : 'No users yet';
-      publicDrawMeta.textContent = publicLeads.length
-        ? `${publicLeads.length} submitted user${publicLeads.length === 1 ? '' : 's'} ready.`
-        : 'The live shuffle will appear here when the admin starts.';
+      const readyCount = participantCount || publicLeads.length;
+      const participantLine = readyCount
+        ? `${readyCount} participant${readyCount === 1 ? '' : 's'} are all set.`
+        : 'Your entry is all set.';
+      publicDrawSummary.innerHTML = '<span class="summary-line">Thank you for participating in the lucky draw! &#127881;</span><span class="summary-line">Your entry has been successfully submitted.</span><span class="summary-line summary-gap">Please stay tuned and wait for the live shuffle.</span><span class="summary-line">The final winner will be announced shortly.</span>';
+      publicDrawCountdown.innerHTML = '<span class="draw-pill-icon"><i data-lucide="gift"></i></span><span>Ready</span>';
+      publicDrawStatus.textContent = 'STANDBY';
+      publicDrawName.textContent = 'Ready for the Lucky Draw';
+      publicDrawMeta.innerHTML = `<div class="draw-meta-divider"><span></span><i data-lucide="users-round"></i><span></span></div><div>${participantLine}</div><div>Stay tuned for the live shuffle!</div>`;
+      lucide.createIcons();
     }
 
     function syncPublicTicker() {
