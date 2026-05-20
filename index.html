@@ -1140,59 +1140,84 @@
 
       main {
         min-height: calc(100svh - var(--top-strip-height) - var(--header-height));
-        padding: calc(var(--top-strip-height) + var(--header-height) + 18px) clamp(14px, 2.4vw, 46px) 18px;
+        padding: calc(var(--top-strip-height) + var(--header-height) + 24px) clamp(18px, 2.8vw, 54px) 18px;
         grid-template-columns: minmax(0, 1.04fr) minmax(360px, 0.96fr);
-        gap: clamp(16px, 2vw, 30px);
+        gap: clamp(24px, 2.8vw, 44px);
       }
 
       .hero-content,
       .form-container-card {
-        height: clamp(540px, calc(100svh - var(--top-strip-height) - var(--header-height) - 46px), 650px);
+        height: clamp(520px, calc(100svh - var(--top-strip-height) - var(--header-height) - 54px), 650px);
         min-height: 0;
       }
 
       .form-container-card {
         margin-right: 0;
-        overflow-y: auto;
-        padding: clamp(22px, 2.4vw, 38px);
+        overflow: visible;
+        padding: clamp(16px, 2vw, 30px);
       }
 
       .form-header {
-        margin-bottom: 18px;
+        margin-bottom: 14px;
       }
 
       .form-header h2 {
-        font-size: clamp(30px, 3.2vw, 48px);
+        font-size: clamp(30px, 3vw, 42px);
+        margin-bottom: 8px;
       }
 
       .form-header p {
-        font-size: clamp(13px, 1vw, 15px);
+        font-size: clamp(12px, 0.95vw, 14px);
+        line-height: 1.45;
       }
 
       .form-header::after {
-        margin-top: 12px;
-        font-size: 24px;
+        margin-top: 8px;
+        font-size: 21px;
+        letter-spacing: 8px;
       }
 
       #audit-form {
-        padding: clamp(18px, 2vw, 24px);
+        width: min(100%, 500px);
+        padding: clamp(14px, 1.7vw, 20px);
       }
 
       .form-group {
-        margin-bottom: 16px;
+        margin-bottom: 11px;
+      }
+
+      .form-label {
+        font-size: 11px;
+        margin-bottom: 6px;
       }
 
       .form-control {
-        padding-top: 14px;
-        padding-bottom: 14px;
+        padding-top: 11px;
+        padding-bottom: 11px;
+        min-height: 46px;
       }
 
       .upload-zone {
-        padding: 20px 18px;
+        padding: 14px 16px;
+      }
+
+      .upload-icon-wrapper {
+        width: 42px;
+        height: 42px;
+        margin-bottom: 8px;
+      }
+
+      .upload-text {
+        font-size: 13px;
+      }
+
+      .upload-hint {
+        font-size: 10px;
       }
 
       .btn-submit {
-        margin-top: 20px;
+        margin-top: 14px;
+        padding: 13px;
       }
     }
 
