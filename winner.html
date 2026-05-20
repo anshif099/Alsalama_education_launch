@@ -1164,7 +1164,7 @@
           <span>Live Draw</span>
         </div>
         <h1>Live Lucky Draw</h1>
-        <p id="public-draw-summary">Watch the same 30 second shuffle running from the admin screen.</p>
+        <p id="public-draw-summary">Thank you for participating in the lucky draw! 🎉<br>Your entry has been successfully submitted.<br><br>Please stay tuned and wait for the live shuffle. The final winner will be announced shortly.</p>
       </div>
 
       <div class="draw-stage" id="public-draw-stage">
@@ -1339,7 +1339,7 @@
         return;
       }
 
-      publicDrawSummary.textContent = 'Watch the same 30 second shuffle running from the admin screen.';
+      publicDrawSummary.innerHTML = 'Thank you for participating in the lucky draw! 🎉<br>Your entry has been successfully submitted.<br><br>Please stay tuned and wait for the live shuffle. The final winner will be announced shortly.';
       publicDrawCountdown.textContent = 'Ready';
       publicDrawStatus.textContent = 'Waiting';
       publicDrawName.textContent = publicLeads.length ? 'Waiting' : 'No users yet';
